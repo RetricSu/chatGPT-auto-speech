@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "My Output to Speech",
+  "name": "chatGPT auto speech",
   "version": "1.0",
   "description": "This extension converts my output to speech and plays it automatically.",
   "permissions": ["activeTab"],

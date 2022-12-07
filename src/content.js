@@ -18,6 +18,7 @@ window.addEventListener('load', () => {
   button.style.position = 'fixed';
   button.style.left = '50%';
   button.style.top = '50%';
+  button.style.display = 'none';
 
   // Add an animation to the button when it is clicked
   button.style.animation = 'fade 0.5s';
