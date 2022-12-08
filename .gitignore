@@ -1,2 +1,3 @@
-build/*.zip
+!build/.gitkeep
 node_modules
+dist
