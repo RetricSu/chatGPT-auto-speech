@@ -66,8 +66,14 @@ window.addEventListener('load', () => {
     // Add the text from each element to the Map
     elements.forEach((element, index) => {
       if(index >= currentIndex && element.innerText != null && element.innerText.length > 3){// only add the newer element into the map
-        console.log("add new text, ", element.innerText);
-        textMap.set(index, element.innerText);
+        // only read text inside P elements, to exclude reading code
+        const pElements = element.querySelectorAll(':scope p');
+        let text = '';
+        for (let i = 0; i < pElements.length; i++) {
+          text += pElements[i].innerText;
+        }
+        console.log("add new text => ", text);
+        textMap.set(index, text);
       }
     });
     playNext(); 
