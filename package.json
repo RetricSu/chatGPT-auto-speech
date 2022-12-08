@@ -1,0 +1,25 @@
+{
+  "name": "chatGPT-auto-speech",
+  "version": "1.0.0",
+  "description": "A Chrome extension that automatically turns chatGPT response texts into speech.",
+  "main": "src/manifest.json",
+  "scripts": {
+    "build": "tsc --build tsconfig.json && cp assets/icon.png dist/ && cp manifest.json dist/",
+    "fmt": "prettier --write 'src/**/*.{ts,json}' 'tsconfig.json' 'package.json'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RetricSu/chatGPT-auto-speech.git"
+  },
+  "keywords": [
+    "chrome",
+    "extension",
+    "speech"
+  ],
+  "author": "RetricSu",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.1.0",
+    "prettier": "^2.2.1"
+  }
+}

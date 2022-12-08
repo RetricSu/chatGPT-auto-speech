@@ -11,9 +11,11 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
       with:
-        node-version: '12.x'
+        node-version: '16.x'
+    - run: yarn install
+    - run: yarn build
     - run: sudo apt-get update && sudo apt-get install -y zip
-    - run: zip -r extension.zip src/
+    - run: zip -r extension.zip dist/
     - uses: actions/upload-artifact@v1
       with:
         name: extension
