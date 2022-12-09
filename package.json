@@ -5,7 +5,7 @@
   "main": "src/manifest.json",
   "scripts": {
     "build": "tsc --build tsconfig.json && cp assets/icon.png dist/ && cp manifest.json dist/",
-    "fmt": "prettier --write 'src/**/*.{ts,json}' 'tsconfig.json' 'package.json'"
+    "fmt": "prettier --write 'src/**/*.{ts,json}' 'tsconfig.json' 'package.json' 'manifest.json'"
   },
   "repository": {
     "type": "git",

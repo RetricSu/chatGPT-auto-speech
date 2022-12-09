@@ -1,8 +1,8 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "chatGPT auto speech",
   "version": "1.0",
-  "description": "This extension converts my output to speech and plays it automatically.",
+  "description": "This extension converts chatGPT response text into speech and plays it automatically.",
   "permissions": ["activeTab"],
   "content_scripts": [
     {
@@ -12,6 +12,6 @@
   ],
   "browser_action": {
     "default_icon": "icon.png",
-    "default_title": "Listen to My Output"
+    "default_title": "Listen to chatGPT"
   }
 }
