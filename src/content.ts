@@ -3,25 +3,26 @@ let currentIndex = 0;
 
 // Listen for the "load" event on the window object
 window.addEventListener("load", async (_event: Event) => {
-  findResponseTextToSpeak();
+  await findResponseTextToSpeak();
 });
 
 // find and get response text to speak
 async function findResponseTextToSpeak() {
   // Select all elements that you want to play
-  const elements = document.querySelectorAll(
+  const parentNode = document.querySelectorAll(
     ".bg-gray-50 > .text-base"
   ) as NodeListOf<HTMLElement>;
-  console.log("find elements =>", elements.length);
+  console.log("find elements =>", parentNode.length);
 
-  // Add the text from each element to the Map
-  await elements.forEach(async (element, index) => {
+  for (let index = 0; index < parentNode.length; index++) {
+    const element = parentNode[index];
+
+    // only add the newer element into the speaking
     if (
       index >= currentIndex &&
       element.innerText != null &&
       element.innerText.length > 3
     ) {
-      // only add the newer element into the map
       // only read text inside P elements, to exclude reading code
       const text = findParagraphTexts(element);
       console.log("find new text => ", text);
@@ -38,10 +39,10 @@ async function findResponseTextToSpeak() {
       // Increment the counter variable to move to the next position in the Map
       currentIndex++;
     }
-  });
+  }
 
-  // wait 3 seconds to run again
-  await sleep(3000);
+  // wait 1000 milsecs to run again
+  await sleep(1000);
   await findResponseTextToSpeak();
 }
 
@@ -50,22 +51,29 @@ async function watchParagraphTextsToContinueSpeak(
   originalParentNodeInnerTextLength: number,
   originalText: string
 ) {
-  // wait 1 secs
-  await sleep(1000);
+  // wait 100 milsecs
+  await sleep(100);
 
   const texts = findParagraphTexts(parentNode);
   const parentNodeInnerTextLength = parentNode.innerText.length;
   if (texts.length < originalText.length) {
-    throw new Error("odd, the text length became shorter..");
+    console.error(
+      "[chatGPT-auto-speech] the text length became shorter..abort"
+    );
+    return;
   }
 
   if (
     texts.length > originalText.length ||
     parentNodeInnerTextLength > originalParentNodeInnerTextLength
   ) {
-    // speak the added text
-    const addedText = texts.slice(originalText.length - 1);
-    await speakLang(addedText);
+    // speak the added text if any
+    if (texts.length > originalText.length) {
+      const addedText = texts.slice(originalText.length);
+      console.log("added text =>", addedText);
+      await speakLang(addedText);
+    }
+
     // keep watching for texts change
     await watchParagraphTextsToContinueSpeak(
       parentNode,
@@ -137,6 +145,14 @@ async function speakLang(texts: string) {
   // Create a new SpeechSynthesisUtterance object
   let utterance = new SpeechSynthesisUtterance();
 
+  const voice = findCorrectVoice(language);
+  if (voice != null) {
+    utterance.voice = voice;
+  }
+
+  // tune speaking speed
+  utterance.rate = 1.1; // a little faster than normal
+
   // Set the text and language of the utterance based on the
   // dominant language of the text
   if (language === Language.Chinese) {
@@ -176,4 +192,25 @@ const sleep = (milliseconds: number) => {
   return new Promise((resolve) => {
     setTimeout(resolve, milliseconds);
   });
+};
+
+const findCorrectVoice = (lang: Language) => {
+  const speechSynthesis = window.speechSynthesis;
+  if (lang == Language.Chinese) {
+    const voices = speechSynthesis
+      .getVoices()
+      .filter((voice) => voice.name === "Ting-Ting" && voice.lang === "zh-CN");
+    if (voices.length > 0) {
+      return voices[0];
+    }
+  } else if (lang == Language.English) {
+    const voices = speechSynthesis
+      .getVoices()
+      .filter((voice) => voice.name === "Alex" && voice.lang === "en-US");
+    if (voices.length > 0) {
+      return voices[0];
+    }
+  }
+
+  return null;
 };
