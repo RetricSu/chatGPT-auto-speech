@@ -6,17 +6,19 @@ fun fact 2: so it is full of bugs now! but seriously please help if you are inte
 
 ## How to install
 
-### Chrome extension store
+### 1. Install from the chrome web store
 
-(unavailable now)
+https://chrome.google.com/webstore/detail/chatgpt-auto-speech/jliflimkjclgbmfficnhimfdmmikpabb
 
-### Install by yourself
+![web store](assets/web-store.png)
 
-the github CI will build a `extension.zip` file for every commit in master branch.
+### 2. Install from the local file
+
+the GitHub CI will build an `extension.zip` file for every commit in the master branch.
 
 example: https://github.com/RetricSu/chatGPT-auto-speech/actions/runs/3657606515
 
-![image](assets/artifacts.png)
+![artifacts](assets/artifacts.png)
 
 - download and unzip the file.
 - open the `brave://extensions/` or `chrome://extension` tab on your browser
