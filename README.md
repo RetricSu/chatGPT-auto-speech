@@ -4,6 +4,19 @@ fun fact: this code is co-written by chatGPT and me(I mean, a human, of course).
 
 fun fact 2: so it is full of bugs now! but seriously please help if you are interested.
 
+## Feature
+
+just listen and talk, a more human-like conversation for you and chatGPT.
+
+### 1. Use voice for typing
+
+1. Press and hold the right shift key on your keyboard when you want to talk to chatGPT, the voice will be converted into text on the textarea.
+2. Press enter to send the message.
+
+### 2. Convert chatGPT response text into speech
+
+auto convert the response text from chatGPT into speech.
+
 ## How to install
 
 ### 1. Install from the chrome web store
