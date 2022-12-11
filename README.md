@@ -1,4 +1,4 @@
-# Chrome extension for human-like conversation for you and chatGPT
+# Simple Chrome extension: listen and talk to chatGPT
 
 fun fact: this code is co-written by chatGPT and me(I mean, a human, of course).
 
@@ -16,6 +16,10 @@ just listen and talk, a more human-like conversation for you and chatGPT.
 ### 2. Convert chatGPT response text into speech
 
 auto convert the response text from chatGPT into speech.
+
+### 3. simple code
+
+no additional npm denpendencies, use pure web api.
 
 ## How to install
 
