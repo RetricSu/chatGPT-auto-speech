@@ -15,7 +15,7 @@ jobs:
     - run: yarn install
     - run: yarn build
     - run: sudo apt-get update && sudo apt-get install -y zip
-    - run: zip -r extension.zip dist/
+    - run: zip -r extension.zip dist
     - uses: actions/upload-artifact@v1
       with:
         name: extension
