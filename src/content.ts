@@ -1,8 +1,13 @@
-/*** input */
+/******** input sections *********/
 
 // Listen for the "load" event on the window object
 window.addEventListener("load", async (_event: Event) => {
-  await requestMicrophonePermission();
+  // insert a speaking icon
+  const speakingIcon = insertSpeakingIcon();
+
+  // ask for permission
+  const isPermitted = await requestMicrophonePermission();
+  insertMicrophoneIcon(isPermitted);
 
   const SpeechRecognition =
     (window as any).SpeechRecognition ||
@@ -16,7 +21,7 @@ window.addEventListener("load", async (_event: Event) => {
     return;
   }
 
-  const triggerKeyCode = "ShiftLeft";
+  const triggerKeyCode = "ShiftRight";
   const recognition = new SpeechRecognition() as SpeechRecognition;
   let recognizing = false;
   recognition.onstart = function () {
@@ -46,6 +51,7 @@ window.addEventListener("load", async (_event: Event) => {
     if (event.code === triggerKeyCode) {
       // If it is, log a message to the console
       console.log("Space key release detected");
+      hideIcon(speakingIcon);
       stopDictation(recognition);
     }
   });
@@ -57,6 +63,7 @@ window.addEventListener("load", async (_event: Event) => {
       if (!recognizing) {
         // If it is, log a message to the console
         console.log("Space key hold detected");
+        showIcon(speakingIcon);
         startDictation(recognition, typingInTextArea);
       }
     }
@@ -129,7 +136,51 @@ async function requestMicrophonePermission(): Promise<boolean> {
   }
 }
 
-/*** output */
+function insertSpeakingIcon() {
+  const icon = document.createElement("h1");
+  icon.innerText = "Speaking..";
+  document.body.appendChild(icon);
+
+  // Place the icon in the top-right corner of the page
+  icon.style.position = "absolute";
+  icon.style.top = "0";
+  icon.style.right = "0";
+  icon.style.color = "green";
+
+  // Hide the icon by default
+  icon.style.display = "none";
+  return icon;
+}
+
+function insertMicrophoneIcon(isPermitted: boolean) {
+  const icon = document.createElement("div");
+  document.body.appendChild(icon);
+
+  // Place the icon in the top-right corner of the page
+  icon.style.position = "absolute";
+  icon.style.top = "0";
+  icon.style.right = "0";
+
+  // Hide the icon by default
+  if (isPermitted) {
+    icon.innerText = "mic ☑️";
+    icon.style.color = "green";
+  } else {
+    icon.innerText = "mic ✖️";
+    icon.style.color = "red";
+  }
+  return icon;
+}
+
+function showIcon(icon: HTMLElement) {
+  icon.style.display = "block";
+}
+
+function hideIcon(icon: HTMLElement) {
+  icon.style.display = "none";
+}
+
+/******** output sections *********/
 // Create a counter variable to keep track of the position of the currently playing text
 let currentIndex = 0;
 
