@@ -1,4 +1,4 @@
-# a simple chrome extension to turn chatGPT response text into speech
+# Chrome extension for human-like conversation for you and chatGPT
 
 fun fact: this code is co-written by chatGPT and me(I mean, a human, of course).
 
