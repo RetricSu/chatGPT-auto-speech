@@ -42,7 +42,12 @@ window.addEventListener("load", async (_event: Event) => {
     throw new Error("textareaElement is null");
   }
   const typingInTextArea = (text: string) => {
-    textareaElement.value += text;
+    let appendText = text;
+    if (textareaElement.value != null && textareaElement.value != "") {
+      // a simple workaround since we don't have auto-punctuation
+      appendText = ", " + appendText;
+    }
+    textareaElement.value += appendText;
   };
 
   // Listen for keyup events on the document
