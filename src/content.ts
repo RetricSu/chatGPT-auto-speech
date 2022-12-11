@@ -1,3 +1,135 @@
+/*** input */
+
+// Listen for the "load" event on the window object
+window.addEventListener("load", async (_event: Event) => {
+  await requestMicrophonePermission();
+
+  const SpeechRecognition =
+    (window as any).SpeechRecognition ||
+    (window as any).webkitSpeechRecognition ||
+    (window as any).mozSpeechRecognition ||
+    (window as any).msSpeechRecognition ||
+    (window as any).oSpeechRecognition;
+
+  if (SpeechRecognition == null) {
+    console.log("SpeechRecognition not supported!");
+    return;
+  }
+
+  const triggerKeyCode = "ShiftLeft";
+  const recognition = new SpeechRecognition() as SpeechRecognition;
+  let recognizing = false;
+  recognition.onstart = function () {
+    console.log("start recognizing!!");
+    recognizing = true;
+  };
+  recognition.onend = function () {
+    recognizing = false;
+  };
+  recognition.onerror = function (event) {
+    recognizing = false;
+  };
+
+  const textareaElement: HTMLTextAreaElement | null = document.querySelector(
+    "textarea.w-full.resize-none[data-id]"
+  );
+  if (textareaElement == null) {
+    throw new Error("textareaElement is null");
+  }
+  const typingInTextArea = (text: string) => {
+    textareaElement.value += text;
+  };
+
+  // Listen for keyup events on the document
+  document.addEventListener("keyup", (event: KeyboardEvent) => {
+    // Check if the released key is the space bar
+    if (event.code === triggerKeyCode) {
+      // If it is, log a message to the console
+      console.log("Space key release detected");
+      stopDictation(recognition);
+    }
+  });
+
+  // Listen for keypress events on the document
+  document.addEventListener("keydown", (event: KeyboardEvent) => {
+    // Check if the held key is the space bar
+    if (event.code === triggerKeyCode) {
+      if (!recognizing) {
+        // If it is, log a message to the console
+        console.log("Space key hold detected");
+        startDictation(recognition, typingInTextArea);
+      }
+    }
+  });
+});
+
+// Define a type for the keydown, keyup, and keypress event handlers
+type KeyEventHandler = (event: KeyboardEvent) => void;
+
+async function startDictation(
+  recognition: SpeechRecognition,
+  callback?: (text: string) => any
+) {
+  try {
+    // If permission is granted, start listening for speech input
+    recognition.start();
+
+    // When speech is detected, transcribe it into text
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      const result = event.results[0][0];
+
+      // Check if the result is a final result
+      if (result.confidence > 0.5) {
+        // Get the transcript of the recognized speech
+        const transcript = result.transcript;
+        console.log("transcript: ", transcript);
+
+        if (callback) {
+          // Do something with the transcribed text, such as typing it into a text input box
+          callback(transcript);
+        }
+      }
+    };
+  } catch (error) {
+    // Handle any other errors or exceptions that might occur
+    throw error;
+  }
+}
+
+async function stopDictation(recognition: SpeechRecognition) {
+  // Stop listening for speech input
+  recognition.stop();
+}
+
+async function requestMicrophonePermission(): Promise<boolean> {
+  const permission: PermissionStatus = await navigator.permissions.query({
+    name: "microphone" as PermissionName,
+  });
+
+  if (permission.state === "granted") {
+    return true;
+  } else {
+    navigator.mediaDevices
+      .getUserMedia({ video: false, audio: true })
+      .then((stream) => {
+        (window as any).localStream = stream;
+        (window as any).localAudio.srcObject = stream;
+        (window as any).localAudio.autoplay = true;
+      })
+      .catch((err) => {
+        console.error(`getUserMedia got an error: ${err}`);
+      });
+    return new Promise((resolve) => {
+      // Set the event handler for the change event
+      permission.onchange = () => {
+        // Resolve the promise with the current state of the permission
+        resolve(permission.state === "granted");
+      };
+    });
+  }
+}
+
+/*** output */
 // Create a counter variable to keep track of the position of the currently playing text
 let currentIndex = 0;
 
