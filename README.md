@@ -1,3 +1,7 @@
+> ⚠️ **Warning:** This project is no longer maintained
+>
+> instead we are doing a standalone web app, please check it out here: [https://github.com/RetricSu/VoiceGPT](https://github.com/RetricSu/VoiceGPT) 🚀
+
 # Simple Chrome extension: listen and talk to chatGPT
 
 fun fact: this code is co-written by chatGPT and me(I mean, a human, of course).
